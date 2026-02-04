@@ -8,19 +8,24 @@ import { AllHttpExceptionsFilter } from "./core/filters/all-http-exception.filte
 import * as process from "node:process";
 import { CqrsModule } from "@nestjs/cqrs";
 import { jwtEnv } from "./core/env";
+import { AuthModule } from "./features/auth/auth.module";
+import { PrismaModule } from "./shared/libs/prisma";
+import { pgEnv } from "@/core/env/pg.env";
 
 @Module({
 	imports: [
+		PrismaModule,
 		ConfigModule.forRoot({
 			isGlobal: true,
-			load: [jwtEnv],
+			load: [jwtEnv, pgEnv],
 			envFilePath: [
 				`.env.${process.env.NODE_ENV || "development"}.local`,
 				".env"
 			].filter(Boolean)
 		}),
 		CqrsModule.forRoot(),
-		UserModule
+		UserModule,
+		AuthModule
 	],
 	controllers: [AppController],
 	providers: [
