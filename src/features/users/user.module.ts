@@ -10,6 +10,7 @@ const queries = [GetUserByIdQueryHandler];
 
 @Module({
 	controllers: [UserController],
-	providers: [UserQueryRepository, UserRepository, ...commands, ...queries]
+	providers: [UserQueryRepository, UserRepository, ...commands, ...queries],
+	exports: [UserRepository]
 })
 export class UserModule {}

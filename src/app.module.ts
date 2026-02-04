@@ -14,7 +14,6 @@ import { pgEnv } from "@/core/env/pg.env";
 
 @Module({
 	imports: [
-		PrismaModule,
 		ConfigModule.forRoot({
 			isGlobal: true,
 			load: [jwtEnv, pgEnv],
@@ -24,6 +23,7 @@ import { pgEnv } from "@/core/env/pg.env";
 			].filter(Boolean)
 		}),
 		CqrsModule.forRoot(),
+		PrismaModule,
 		UserModule,
 		AuthModule
 	],
