@@ -20,7 +20,7 @@ export class PrismaService
 		private readonly configService: ConfigService<IAllConfigsInterface>
 	) {
 		const adapter = new PrismaPg({
-			user: configService.get<string>("pg.user,", {
+			user: configService.get<string>("pg.user", {
 				infer: true
 			}),
 			password: configService.get<string>("pg.password", { infer: true }),
