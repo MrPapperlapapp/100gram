@@ -12,10 +12,16 @@ import { MailModule } from "@/shared/libs/mailer/mail.module";
 import { BullModule } from "@nestjs/bullmq";
 import {
 	RegistrationConfirmationCommandHandler,
-	SignUpCommandHandler
+	SignUpCommandHandler,
+	SignInCommandHandler
 } from "@/features/auth/application";
+import { JwtWrapperModule } from "@/shared/libs/jwt/jwt.module";
 
-const commands = [SignUpCommandHandler, RegistrationConfirmationCommandHandler];
+const commands = [
+	SignUpCommandHandler,
+	RegistrationConfirmationCommandHandler,
+	SignInCommandHandler
+];
 
 @Module({
 	imports: [
@@ -26,6 +32,7 @@ const commands = [SignUpCommandHandler, RegistrationConfirmationCommandHandler];
 			inject: [ConfigService]
 		}),
 		HashModule,
+		JwtWrapperModule,
 		MailModule,
 		UserModule
 	],

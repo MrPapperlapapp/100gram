@@ -1,13 +1,24 @@
 import { CommandBus } from "@nestjs/cqrs";
-import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
+import {
+	Body,
+	Controller,
+	HttpCode,
+	HttpStatus,
+	Post,
+	Res
+} from "@nestjs/common";
 import {
 	EmailConfirmationRequestDto,
+	SignInRequestDto,
 	SignUpUserRequestDto
 } from "@/features/auth/dto";
 import {
 	RegistrationConfirmationCommand,
+	SignInCommand,
 	SignUpCommand
 } from "@/features/auth/application/commands";
+import type { Response } from "express";
+import { SignInResponseDto } from "@/features/auth/dto/responses/sign-in.response.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -27,5 +38,26 @@ export class AuthController {
 		return this.commandBus.execute<RegistrationConfirmationCommand, void>(
 			new RegistrationConfirmationCommand(token)
 		);
+	}
+
+	@Post("sign-in")
+	@HttpCode(HttpStatus.OK)
+	async signInS(
+		@Body() dto: SignInRequestDto,
+		@Res({ passthrough: true }) res: Response
+	) {
+		const { password, email } = dto;
+		const { refreshToken, accessToken } = await this.commandBus.execute<
+			SignInCommand,
+			SignInResponseDto & { refreshToken: string }
+		>(new SignInCommand(email, password));
+
+		res.cookie("refresh", refreshToken, {
+			httpOnly: true,
+			secure: true,
+			maxAge: 60 * 60 * 1000
+		});
+
+		return { accessToken };
 	}
 }
