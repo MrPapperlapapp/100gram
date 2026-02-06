@@ -6,12 +6,16 @@ import { ConfigService } from "@nestjs/config";
 import { getJwtConfig } from "@/core/configs/jwt.config";
 import { AuthController } from "@/features/auth/auth.controller";
 import { UserModule } from "@/features/users/user.module";
-import { SignUpCommandHandler } from "@/features/auth/application/commands";
+
 import { HashModule } from "@/shared/libs/hash/hash.module";
 import { MailModule } from "@/shared/libs/mailer/mail.module";
 import { BullModule } from "@nestjs/bullmq";
+import {
+	RegistrationConfirmationCommandHandler,
+	SignUpCommandHandler
+} from "@/features/auth/application";
 
-const commands = [SignUpCommandHandler];
+const commands = [SignUpCommandHandler, RegistrationConfirmationCommandHandler];
 
 @Module({
 	imports: [

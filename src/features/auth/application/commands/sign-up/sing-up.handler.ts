@@ -1,5 +1,4 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { SignUpCommand } from "@/features/auth/application/commands/sign-up/sign-up.command";
 import { UserRepository } from "@/features/users/infrastructure/user.repository";
 import { ConflictException } from "@nestjs/common";
 import { HashService } from "@/shared/libs/hash/hash.service";
@@ -7,6 +6,7 @@ import { RedisService } from "@/shared/libs/redis/redis.service";
 import { randomUUID } from "crypto";
 import { InjectQueue } from "@nestjs/bullmq";
 import { Queue } from "bullmq";
+import { SignUpCommand } from "./sign-up.command";
 
 @CommandHandler(SignUpCommand)
 export class SignUpCommandHandler implements ICommandHandler<

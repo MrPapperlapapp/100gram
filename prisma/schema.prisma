@@ -11,11 +11,12 @@ generator client {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique @db.VarChar(30)
-  name     String @unique @db.VarChar(30)
-  password String @db.VarChar(255)
-  role     Roles  @default(USER)
+  id          String  @id @default(uuid())
+  email       String  @unique @db.VarChar(30)
+  name        String  @unique @db.VarChar(30)
+  password    String  @db.VarChar(255)
+  role        Roles   @default(USER)
+  isConfirmed Boolean @default(false) @map("is_confirmed")
 
   @@map("users")
 }

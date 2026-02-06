@@ -19,6 +19,17 @@ export class UserRepository {
 		return user.id;
 	}
 
+	async userConfirmationById(id: string) {
+		return this.prisma.user.update({
+			data: { isConfirmed: true },
+			where: { id }
+		});
+	}
+
+	async findUserById(id: string): Promise<User | null> {
+		return this.prisma.user.findUnique({ where: { id } });
+	}
+
 	async findUserByEmail(email: string): Promise<User | null> {
 		return this.prisma.user.findUnique({ where: { email } });
 	}
