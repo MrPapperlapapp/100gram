@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 	appSetup(app);
-	app.use(cookieParser());
+	app.use(cookieParser()); //TODO COOKIE SIGNATURE WITH SECRET
 	await app.listen(process.env.PORT ?? 3000);
 }
 

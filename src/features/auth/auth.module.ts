@@ -16,6 +16,7 @@ import {
 	SignInCommandHandler
 } from "@/features/auth/application";
 import { JwtWrapperModule } from "@/shared/libs/jwt/jwt.module";
+import { JwtStrategy } from "@/shared/strategies";
 
 const commands = [
 	SignUpCommandHandler,
@@ -36,7 +37,7 @@ const commands = [
 		MailModule,
 		UserModule
 	],
-	providers: [...commands],
+	providers: [...commands, JwtStrategy],
 	controllers: [AuthController]
 })
 export class AuthModule {}

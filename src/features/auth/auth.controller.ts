@@ -2,9 +2,11 @@ import { CommandBus } from "@nestjs/cqrs";
 import {
 	Body,
 	Controller,
+	Get,
 	HttpCode,
 	HttpStatus,
 	Post,
+	Req,
 	Res
 } from "@nestjs/common";
 import {
@@ -17,8 +19,9 @@ import {
 	SignInCommand,
 	SignUpCommand
 } from "@/features/auth/application/commands";
-import type { Response } from "express";
+import type { Request, Response } from "express";
 import { SignInResponseDto } from "@/features/auth/dto/responses/sign-in.response.dto";
+import { Protected } from "@/shared/decorators/protected.decorator";
 
 @Controller("auth")
 export class AuthController {
@@ -59,5 +62,12 @@ export class AuthController {
 		});
 
 		return { accessToken };
+	}
+
+	@Protected()
+	@Get("me")
+	@HttpCode(HttpStatus.OK)
+	getMe(@Req() req: Request) {
+		return req.user.id;
 	}
 }

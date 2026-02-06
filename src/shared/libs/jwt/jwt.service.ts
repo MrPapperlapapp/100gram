@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import { IJwtPayload } from "../../types/jwt-payload.type";
+import { IJwtPayload } from "../../types";
 
 @Injectable()
 export class JwtWrapperService {
