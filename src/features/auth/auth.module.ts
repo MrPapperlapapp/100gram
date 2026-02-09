@@ -13,7 +13,8 @@ import { BullModule } from "@nestjs/bullmq";
 import {
 	RegistrationConfirmationCommandHandler,
 	SignUpCommandHandler,
-	SignInCommandHandler
+	SignInCommandHandler,
+	ResendConfirmationCodeCommandHandler
 } from "@/features/auth/application";
 import { JwtWrapperModule } from "@/shared/libs/jwt/jwt.module";
 import { JwtStrategy } from "@/shared/strategies";
@@ -21,7 +22,8 @@ import { JwtStrategy } from "@/shared/strategies";
 const commands = [
 	SignUpCommandHandler,
 	RegistrationConfirmationCommandHandler,
-	SignInCommandHandler
+	SignInCommandHandler,
+	ResendConfirmationCodeCommandHandler
 ];
 
 @Module({
