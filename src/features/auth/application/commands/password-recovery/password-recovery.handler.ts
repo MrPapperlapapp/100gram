@@ -1,14 +1,14 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { ResendConfirmationCodeCommand } from "./resend-confirmation-code.command";
+import { PasswordRecoveryCommand } from "./password-recovery.command";
 import { UserRepository } from "@/features/users/infrastructure/user.repository";
 import { RedisService } from "@/shared/libs/redis/redis.service";
 import { randomUUID } from "crypto";
 import { InjectQueue } from "@nestjs/bullmq";
 import { Queue } from "bullmq";
 
-@CommandHandler(ResendConfirmationCodeCommand)
-export class ResendConfirmationCodeCommandHandler implements ICommandHandler<
-	ResendConfirmationCodeCommand,
+@CommandHandler(PasswordRecoveryCommand)
+export class PasswordRecoveryCommandHandler implements ICommandHandler<
+	PasswordRecoveryCommand,
 	void
 > {
 	constructor(
@@ -17,24 +17,19 @@ export class ResendConfirmationCodeCommandHandler implements ICommandHandler<
 		@InjectQueue("email") private readonly mailQueue: Queue
 	) {}
 
-	async execute({ email }: ResendConfirmationCodeCommand) {
+	async execute({ email }: PasswordRecoveryCommand) {
 		const isUserExist = await this.userRepository.findUserByEmail(email);
-		if (!isUserExist || isUserExist.isConfirmed) return;
+		if (!isUserExist) return;
 
 		const token = randomUUID();
 
-		await this.redisService.set(
-			`confirmation:${token}`,
-			isUserExist.id,
-			"EX",
-			300
-		);
+		await this.redisService.set(`recovery:${token}`, email, "EX", 300);
 
 		await this.mailQueue.add("send-email", {
 			email,
 			token,
-			subject: "Подтверждение регистрации",
-			template: "confirmation"
+			subject: "Сброс пароля",
+			template: "password-recovery"
 		});
 	}
 }

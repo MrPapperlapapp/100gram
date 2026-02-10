@@ -14,7 +14,8 @@ import {
 	RegistrationConfirmationCommandHandler,
 	SignUpCommandHandler,
 	SignInCommandHandler,
-	ResendConfirmationCodeCommandHandler
+	ResendConfirmationCodeCommandHandler,
+	PasswordRecoveryCommandHandler
 } from "@/features/auth/application";
 import { JwtWrapperModule } from "@/shared/libs/jwt/jwt.module";
 import { JwtStrategy } from "@/shared/strategies";
@@ -23,7 +24,8 @@ const commands = [
 	SignUpCommandHandler,
 	RegistrationConfirmationCommandHandler,
 	SignInCommandHandler,
-	ResendConfirmationCodeCommandHandler
+	ResendConfirmationCodeCommandHandler,
+	PasswordRecoveryCommandHandler
 ];
 
 @Module({
