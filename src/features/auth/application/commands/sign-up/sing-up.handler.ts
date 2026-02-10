@@ -21,8 +21,8 @@ export class SignUpCommandHandler implements ICommandHandler<
 	) {}
 
 	async execute({ dto: { userName, email, password } }: SignUpCommand) {
-		const isEmailExist = await this.userRepository.findUserByEmail(email);
-		if (isEmailExist) {
+		const user = await this.userRepository.findUserByEmail(email);
+		if (user) {
 			throw new ConflictException(
 				"Пользователь с таким email существует."
 			);

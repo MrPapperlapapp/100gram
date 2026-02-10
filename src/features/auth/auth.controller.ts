@@ -11,17 +11,24 @@ import {
 } from "@nestjs/common";
 import {
 	EmailConfirmationRequestDto,
+	NewPasswordRequestDto,
+	PasswordRecoverRequestDto,
+	ResendConfirmationTokenRequestDto,
 	SignInRequestDto,
 	SignUpUserRequestDto
 } from "@/features/auth/dto";
 import {
-	RegistrationConfirmationCommand,
+	EmailConfirmationCommand,
+	PasswordRecoveryCommand,
+	ResendConfirmationCodeCommand,
 	SignInCommand,
 	SignUpCommand
 } from "@/features/auth/application/commands";
 import type { Request, Response } from "express";
 import { SignInResponseDto } from "@/features/auth/dto/responses/sign-in.response.dto";
 import { Protected } from "@/shared/decorators/protected.decorator";
+import { Recaptcha } from "@nestlab/google-recaptcha";
+import { NewPasswordCommand } from "@/features/auth/application/commands/new-password";
 
 @Controller("auth")
 export class AuthController {
@@ -38,8 +45,19 @@ export class AuthController {
 	@Post("email-confirmation")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	async emailConfirmation(@Body() { token }: EmailConfirmationRequestDto) {
-		return this.commandBus.execute<RegistrationConfirmationCommand, void>(
-			new RegistrationConfirmationCommand(token)
+		return this.commandBus.execute<EmailConfirmationCommand, void>(
+			new EmailConfirmationCommand(token)
+		);
+	}
+
+	@Recaptcha()
+	@Post("email-confirmation-resending")
+	@HttpCode(HttpStatus.NO_CONTENT)
+	async emailConfirmationResending(
+		@Body() { email }: ResendConfirmationTokenRequestDto
+	) {
+		return this.commandBus.execute<ResendConfirmationCodeCommand, void>(
+			new ResendConfirmationCodeCommand(email)
 		);
 	}
 
@@ -62,6 +80,22 @@ export class AuthController {
 		});
 
 		return { accessToken };
+	}
+
+	@Post("password-recovery")
+	@HttpCode(HttpStatus.NO_CONTENT)
+	async passwordRecovery(@Body() { email }: PasswordRecoverRequestDto) {
+		return this.commandBus.execute<PasswordRecoveryCommand, void>(
+			new PasswordRecoveryCommand(email)
+		);
+	}
+
+	@Post("new-password")
+	@HttpCode(HttpStatus.NO_CONTENT)
+	async newPassword(@Body() { password, token }: NewPasswordRequestDto) {
+		return this.commandBus.execute<NewPasswordCommand, void>(
+			new NewPasswordCommand(token, password)
+		);
 	}
 
 	@Protected()

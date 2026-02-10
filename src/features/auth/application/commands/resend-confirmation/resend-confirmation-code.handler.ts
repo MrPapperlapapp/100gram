@@ -18,14 +18,14 @@ export class ResendConfirmationCodeCommandHandler implements ICommandHandler<
 	) {}
 
 	async execute({ email }: ResendConfirmationCodeCommand) {
-		const isUserExist = await this.userRepository.findUserByEmail(email);
-		if (!isUserExist || isUserExist.isConfirmed) return;
+		const user = await this.userRepository.findUserByEmail(email);
+		if (!user || user.isConfirmed) return;
 
 		const token = randomUUID();
 
 		await this.redisService.set(
 			`confirmation:${token}`,
-			isUserExist.id,
+			user.id,
 			"EX",
 			300
 		);

@@ -1,4 +1,4 @@
-export interface IMailerInterface {
+export interface IMailerConfig {
 	host: string;
 	port: string;
 	user: string;

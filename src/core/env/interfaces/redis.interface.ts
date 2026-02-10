@@ -1,4 +1,4 @@
-export interface IRedisInterface {
+export interface IRedisConfig {
 	host: string;
 	port: number;
 	user: string;

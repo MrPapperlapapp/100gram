@@ -1,9 +1,9 @@
 import { registerAs } from "@nestjs/config";
 
 import { MailerValidator, validateEnv } from "./validators";
-import { IMailerInterface } from "./interfaces";
+import { IMailerConfig } from "./interfaces";
 
-export const mailerEnv = registerAs<IMailerInterface>("mailer", () => {
+export const mailerEnv = registerAs<IMailerConfig>("mailer", () => {
 	validateEnv(process.env, MailerValidator);
 	return {
 		host: process.env.MAIL_HOST,

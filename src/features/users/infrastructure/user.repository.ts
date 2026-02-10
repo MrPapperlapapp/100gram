@@ -37,4 +37,19 @@ export class UserRepository {
 	async findUserByName(name: string): Promise<User | null> {
 		return this.prisma.user.findUnique({ where: { name } });
 	}
+
+	async update(id: string, data: Partial<User>) {
+		return this.prisma.user.update({
+			where: { id },
+			data: {
+				...(data?.email != null && { email: data.email }),
+				...(data?.name != null && { name: data.name }),
+				...(data?.password != null && { password: data.password }),
+				...(data?.role != null && { role: data.role }),
+				...(data?.isConfirmed != null && {
+					isConfirmed: data.isConfirmed
+				})
+			}
+		});
+	}
 }

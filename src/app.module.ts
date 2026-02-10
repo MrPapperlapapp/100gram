@@ -7,7 +7,7 @@ import { APP_FILTER } from "@nestjs/core";
 import { AllHttpExceptionsFilter } from "./core/filters/all-http-exception.filter";
 import * as process from "node:process";
 import { CqrsModule } from "@nestjs/cqrs";
-import { jwtEnv, mailerEnv, pgEnv, redisEnv } from "./core/env";
+import { jwtEnv, mailerEnv, pgEnv, recaptchaEnv, redisEnv } from "./core/env";
 import { AuthModule } from "./features/auth/auth.module";
 import { PrismaModule } from "./shared/libs/prisma";
 
@@ -19,7 +19,7 @@ import { RedisModule } from "@/shared/libs/redis/redis.module";
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
-			load: [jwtEnv, pgEnv, redisEnv, mailerEnv],
+			load: [jwtEnv, pgEnv, redisEnv, mailerEnv, recaptchaEnv],
 			envFilePath: [
 				`.env.${process.env.NODE_ENV || "development"}.local`,
 				".env"

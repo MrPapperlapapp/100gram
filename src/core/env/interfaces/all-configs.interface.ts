@@ -1,11 +1,13 @@
 import { IJwtConfig } from "./jwt.interface";
-import { IPgAdapter } from "@/core/env/interfaces/pg-adapter.interface";
-import { IRedisInterface } from "@/core/env/interfaces/redis.interface";
-import { IMailerInterface } from "@/core/env/interfaces/mailer.interface";
+import { IPgAdapterConfig } from "@/core/env/interfaces/pg-adapter.interface";
+import { IRedisConfig } from "@/core/env/interfaces/redis.interface";
+import { IMailerConfig } from "@/core/env/interfaces/mailer.interface";
+import { IRecaptchaConfig } from "@/core/env/interfaces/recaptcha.interface";
 
 export interface IAllConfigsInterface {
 	jwt: IJwtConfig;
-	pg: IPgAdapter;
-	redis: IRedisInterface;
-	mailer: IMailerInterface;
+	pg: IPgAdapterConfig;
+	redis: IRedisConfig;
+	mailer: IMailerConfig;
+	recaptcha: IRecaptchaConfig;
 }

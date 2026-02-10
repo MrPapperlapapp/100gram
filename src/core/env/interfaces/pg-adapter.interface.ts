@@ -1,4 +1,4 @@
-export interface IPgAdapter {
+export interface IPgAdapterConfig {
 	user: string;
 	password: string;
 	host: string;

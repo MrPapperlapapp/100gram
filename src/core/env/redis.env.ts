@@ -1,9 +1,9 @@
 import { registerAs } from "@nestjs/config";
 
 import { RedisValidator, validateEnv } from "./validators";
-import { IRedisInterface } from "./interfaces";
+import { IRedisConfig } from "./interfaces";
 
-export const redisEnv = registerAs<IRedisInterface>("redis", () => {
+export const redisEnv = registerAs<IRedisConfig>("redis", () => {
 	validateEnv(process.env, RedisValidator);
 	return {
 		host: process.env.REDIS_HOST,

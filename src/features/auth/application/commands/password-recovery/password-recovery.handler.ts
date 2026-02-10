@@ -18,8 +18,8 @@ export class PasswordRecoveryCommandHandler implements ICommandHandler<
 	) {}
 
 	async execute({ email }: PasswordRecoveryCommand) {
-		const isUserExist = await this.userRepository.findUserByEmail(email);
-		if (!isUserExist) return;
+		const user = await this.userRepository.findUserByEmail(email);
+		if (!user) return;
 
 		const token = randomUUID();
 

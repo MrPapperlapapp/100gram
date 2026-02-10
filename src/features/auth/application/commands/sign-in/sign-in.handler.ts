@@ -19,7 +19,7 @@ export class SignInCommandHandler implements ICommandHandler<
 
 	async execute({ password, email }: SignInCommand) {
 		const user = await this.userRepository.findUserByEmail(email);
-		if (!user) {
+		if (!user || !user.isConfirmed) {
 			throw new UnauthorizedException("Unauthorized");
 		}
 
