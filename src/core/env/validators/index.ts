@@ -4,3 +4,4 @@ export * from "./pg.validator";
 export * from "./redis.validator";
 export * from "./mailer.validator";
 export * from "./recaptcha.validator";
+export * from "./s3.validator";

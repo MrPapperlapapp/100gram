@@ -17,8 +17,83 @@ model User {
   password    String  @db.VarChar(255)
   role        Roles   @default(USER)
   isConfirmed Boolean @default(false) @map("is_confirmed")
+  Post        Post[]
+
+  photoUploadSessions PostPhotoUploadSession[]
 
   @@map("users")
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  photos PostPhoto[]
+
+  @@map("posts")
+}
+
+model PostPhoto {
+  id        String   @id @default(uuid())
+  url       String
+  key       String   @unique // ключ в S3 (например: posts/123/photo.png)
+  createdAt DateTime @default(now())
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("post_photos")
+}
+
+enum UploadSessionStatus {
+  INIT
+  COMPLETED
+  FAILED
+}
+
+enum UploadFileStatus {
+  PRESIGNED
+  VERIFIED
+}
+
+model PostPhotoUploadSession {
+  id          String              @id @default(uuid())
+  status      UploadSessionStatus @default(INIT)
+  contentType String
+  count       Int
+  maxSizeBytes Int
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  completedAt DateTime?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  files PostPhotoUploadFile[]
+
+  @@map("post_photo_upload_sessions")
+}
+
+model PostPhotoUploadFile {
+  id         String         @id @default(uuid())
+  key        String         @unique
+  status     UploadFileStatus @default(PRESIGNED)
+  contentType String?
+  sizeBytes  Int?
+  etag       String?
+  verifiedAt DateTime?
+  createdAt  DateTime       @default(now())
+
+  sessionId String
+  session   PostPhotoUploadSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("post_photo_upload_files")
 }
 
 enum Roles {
