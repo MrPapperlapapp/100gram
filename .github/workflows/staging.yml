@@ -19,6 +19,7 @@ jobs:
       REDIS_HOST: localhost
       REDIS_PORT: "6379"
       REDIS_USER: default
+      REDIS_PASSWORD: redispass
       JWT_SECRET: test-jwt-secret
       MAIL_HOST: smtp.example.com
       MAIL_PORT: "587"
@@ -46,15 +47,15 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-redis:
-  image: redis:7
-  ports:
-    - 6379:6379
-  options: >-
-    --health-cmd="redis-cli ping"
-    --health-interval=5s
-    --health-timeout=5s
-    --health-retries=5
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout
