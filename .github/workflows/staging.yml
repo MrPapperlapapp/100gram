@@ -8,7 +8,7 @@ jobs:
   build-test:
     if: |
       github.event.issue.pull_request != null &&
-      contains(github.event.comment.body, '/dev')
+      contains(toLower(github.event.comment.body), 'run build development')
     runs-on: ubuntu-latest
 
     env:
