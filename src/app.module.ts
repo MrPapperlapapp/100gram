@@ -7,19 +7,27 @@ import { APP_FILTER } from "@nestjs/core";
 import { AllHttpExceptionsFilter } from "./core/filters/all-http-exception.filter";
 import * as process from "node:process";
 import { CqrsModule } from "@nestjs/cqrs";
-import { jwtEnv, mailerEnv, pgEnv, recaptchaEnv, redisEnv } from "./core/env";
+import {
+	jwtEnv,
+	mailerEnv,
+	pgEnv,
+	recaptchaEnv,
+	redisEnv,
+	s3Env
+} from "./core/env";
 import { AuthModule } from "./features/auth/auth.module";
 import { PrismaModule } from "./shared/libs/prisma";
 
 import { BullModule } from "@nestjs/bullmq";
 import { bullmqConfig } from "@/core/configs/bullmq.config";
 import { RedisModule } from "@/shared/libs/redis/redis.module";
+import { PostModule } from "@/features/posts/post.module";
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
-			load: [jwtEnv, pgEnv, redisEnv, mailerEnv, recaptchaEnv],
+			load: [jwtEnv, pgEnv, redisEnv, mailerEnv, recaptchaEnv, s3Env],
 			envFilePath: [
 				`.env.${process.env.NODE_ENV || "development"}.local`,
 				".env"
@@ -34,7 +42,8 @@ import { RedisModule } from "@/shared/libs/redis/redis.module";
 		PrismaModule,
 		RedisModule,
 		UserModule,
-		AuthModule
+		AuthModule,
+		PostModule
 	],
 	controllers: [AppController],
 	providers: [

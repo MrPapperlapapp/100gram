@@ -4,10 +4,11 @@ import {
 	OnModuleDestroy,
 	Logger
 } from "@nestjs/common";
-import { PrismaClient } from "prisma/generated/client";
+
 import { ConfigService } from "@nestjs/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { IAllConfigsInterface } from "@/core/env/interfaces";
+import { PrismaClient } from "@prisma/generated/client";
 
 @Injectable()
 export class PrismaService
