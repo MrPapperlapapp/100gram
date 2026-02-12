@@ -1,12 +1,14 @@
 name: Production Deploy
 
 on:
-  push:
-    branches:
-      - main
+  issue_comment:
+    types: [created]
 
 jobs:
   build-and-push:
+    if: |
+      github.event.issue.pull_request != null &&
+      contains(github.event.comment.body, '/prod')
     runs-on: ubuntu-latest
 
     permissions:
@@ -16,6 +18,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -30,12 +35,15 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository.toLowerCase() }}:latest
-            ghcr.io/${{ github.repository.toLowerCase() }}:${{ github.sha }}
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
 
   deploy:
-    runs-on: ubuntu-latest
     needs: build-and-push
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.pull_request != null &&
+      contains(github.event.comment.body, '/prod')
 
     steps:
       - name: Deploy to VPS via SSH
