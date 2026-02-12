@@ -1,14 +1,12 @@
 name: Production Deploy
 
 on:
-  issue_comment:
-    types: [created]
+  push:
+    branches:
+      - main
 
 jobs:
   build-and-push:
-    if: |
-      github.event.issue.pull_request != null &&
-      contains(github.event.comment.body, '/prod')
     runs-on: ubuntu-latest
 
     permissions:
@@ -41,9 +39,6 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: |
-      github.event.issue.pull_request != null &&
-      contains(github.event.comment.body, '/prod')
 
     steps:
       - name: Deploy to VPS via SSH
