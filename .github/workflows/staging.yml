@@ -6,9 +6,7 @@ on:
 
 jobs:
   build-test:
-    if: |
-      github.event.issue.pull_request != null &&
-      contains(toLower(github.event.comment.body), 'run build development')
+    if: github.event.issue.pull_request != null
     runs-on: ubuntu-latest
 
     env:
@@ -34,59 +32,50 @@ jobs:
       S3_REGION: us-east-1
       S3_BUCKET: dummy-bucket
 
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: appdb
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=5
-
-      redis:
-        image: redis:7
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd="redis-cli ping"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare comment
+        id: comment
+        run: echo "COMMENT=$(echo '${{ github.event.comment.body }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Check command
+        if: contains(env.COMMENT, 'run build development')
+        run: echo "Command matched, running CI..."
+
       - name: Setup Node
+        if: contains(env.COMMENT, 'run build development')
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
       - name: Install dependencies
+        if: contains(env.COMMENT, 'run build development')
         run: npm ci
 
       - name: Wait for Postgres and Redis
+        if: contains(env.COMMENT, 'run build development')
         run: |
           npx wait-on tcp:localhost:5432 tcp:localhost:6379
 
       - name: Generate Prisma client
+        if: contains(env.COMMENT, 'run build development')
         run: npm run prisma:generate
 
       - name: Build
+        if: contains(env.COMMENT, 'run build development')
         run: npm run build
 
       - name: Run migrations
+        if: contains(env.COMMENT, 'run build development')
         run: npm run migrate
 
       - name: Run unit tests
+        if: contains(env.COMMENT, 'run build development')
         run: npm test
 
       - name: Run e2e tests
+        if: contains(env.COMMENT, 'run build development')
         run: npm run test:e2e
