@@ -20,7 +20,6 @@ jobs:
       REDIS_HOST: localhost
       REDIS_PORT: "6379"
       REDIS_USER: default
-      REDIS_PASSWORD: redispass
       JWT_SECRET: test-jwt-secret
       MAIL_HOST: smtp.example.com
       MAIL_PORT: "587"

@@ -4,8 +4,11 @@ import * as path from "path";
 // Всегда запускаем тесты в окружении test
 process.env.NODE_ENV = process.env.NODE_ENV || "test";
 
-// Подхватываем переменные из .env.test в корне репозитория
-const envTestPath = path.resolve(__dirname, "../.env.test");
+const envFileName =
+	process.env.NODE_ENV === "development" ? ".env.test.local" : ".env.test";
+console.log("env file", envFileName);
+// Путь к файлу в корне репозитория
+const envTestPath = path.resolve(__dirname, "../", envFileName);
 dotenv.config({ path: envTestPath });
 
 // Обязательные переменные для тестовой БД
