@@ -1,12 +1,14 @@
 name: Development CI
 
 on:
-  push:
-    branches:
-      - development
+  issue_comment:
+    types: [created]
 
 jobs:
   build-test:
+    if: |
+      github.event.issue.pull_request != null &&
+      contains(github.event.comment.body, '/dev')
     runs-on: ubuntu-latest
 
     env:
