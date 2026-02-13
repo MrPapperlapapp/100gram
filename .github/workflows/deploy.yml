@@ -17,6 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+
+      - name: Verify build
+        run: |
+              npm ci
+              npm run prisma:generate
+              npm run build
+              ls -la dist
+
       - name: Set image name
         run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
 
