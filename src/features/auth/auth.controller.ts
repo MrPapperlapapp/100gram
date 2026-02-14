@@ -31,6 +31,10 @@ import { Recaptcha } from "@nestlab/google-recaptcha";
 import { NewPasswordCommand } from "@/features/auth/application/commands/new-password";
 import { SignInSwagger } from "@/features/auth/swagger/sign-in.swagger";
 import { SignUpSwagger } from "@/features/auth/swagger/sign-up.swagger";
+import { NewPasswordSwagger } from "@/features/auth/swagger/new-password.swagger";
+import { PasswordRecoverySwagger } from "@/features/auth/swagger/password-recovery.swagger";
+import { EmailConfirmationSwagger } from "@/features/auth/swagger/email-confirmation.swagger";
+import { ResendConfirmationSwagger } from "@/features/auth/swagger/resend-confirmation.swagger";
 
 @Controller("auth")
 export class AuthController {
@@ -45,6 +49,7 @@ export class AuthController {
 		);
 	}
 
+	@EmailConfirmationSwagger()
 	@Post("email-confirmation")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	async emailConfirmation(@Body() { token }: EmailConfirmationRequestDto) {
@@ -53,6 +58,7 @@ export class AuthController {
 		);
 	}
 
+	@ResendConfirmationSwagger()
 	@Recaptcha()
 	@Post("email-confirmation-resending")
 	@HttpCode(HttpStatus.NO_CONTENT)
@@ -86,6 +92,7 @@ export class AuthController {
 		return { accessToken };
 	}
 
+	@PasswordRecoverySwagger()
 	@Post("password-recovery")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	async passwordRecovery(@Body() { email }: PasswordRecoverRequestDto) {
@@ -94,6 +101,7 @@ export class AuthController {
 		);
 	}
 
+	@NewPasswordSwagger()
 	@Post("new-password")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	async newPassword(@Body() { password, token }: NewPasswordRequestDto) {
