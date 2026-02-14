@@ -29,11 +29,14 @@ import { SignInResponseDto } from "@/features/auth/dto/responses/sign-in.respons
 import { Protected } from "@/shared/decorators/protected.decorator";
 import { Recaptcha } from "@nestlab/google-recaptcha";
 import { NewPasswordCommand } from "@/features/auth/application/commands/new-password";
+import { SignInSwagger } from "@/features/auth/swagger/sign-in.swagger";
+import { SignUpSwagger } from "@/features/auth/swagger/sign-up.swagger";
 
 @Controller("auth")
 export class AuthController {
 	constructor(private readonly commandBus: CommandBus) {}
 
+	@SignUpSwagger()
 	@Post("sign-up")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	async signUp(@Body() dto: SignUpUserRequestDto) {
@@ -61,6 +64,7 @@ export class AuthController {
 		);
 	}
 
+	@SignInSwagger()
 	@Post("sign-in")
 	@HttpCode(HttpStatus.OK)
 	async signInS(
