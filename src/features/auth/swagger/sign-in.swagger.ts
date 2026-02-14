@@ -13,11 +13,18 @@ export function SignInSwagger() {
 		ApiOkResponse({ description: "Успешно", type: SignInResponseDto }),
 		ApiBadRequestResponse({
 			description: "Ошибка валидации отправленных полей.",
-			example: ["email should not be empty"]
+			example: {
+				message: ["email should not be empty"],
+				error: "Bad Request",
+				statusCode: 400
+			}
 		}),
 		ApiUnauthorizedResponse({
 			description: "Не верный логин или пароль",
-			example: ["Unauthorized"]
+			example: {
+				message: "Unauthorized",
+				statusCode: 401
+			}
 		})
 	);
 }

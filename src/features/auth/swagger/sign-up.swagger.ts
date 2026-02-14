@@ -12,12 +12,19 @@ export function SignUpSwagger() {
 		ApiNoContentResponse({ description: "Успешно" }),
 		ApiBadRequestResponse({
 			description: "Ошибка валидации отправленных полей.",
-			example: ["email should not be empty"]
+			example: {
+				message: ["email should not be empty"],
+				error: "Bad Request",
+				statusCode: 400
+			}
 		}),
 		ApiConflictResponse({
 			description:
 				"Пользователь с таким email или username уже существует.",
-			example: ["Пользователь с таким email существует."]
+			example: {
+				message: "Unauthorized",
+				statusCode: 409
+			}
 		})
 	);
 }
